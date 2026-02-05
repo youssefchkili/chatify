@@ -1,10 +1,10 @@
 services:
-  # Backend API + Socket.io Server
+  # Backend API + Socket.io Server + Frontend Static Files
   - type: web
-    name: chatify-backend
+    name: chatify-app
     runtime: node
     plan: free
-    buildCommand: npm install --prefix backend
+    buildCommand: npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend
     startCommand: npm start --prefix backend
     envVars:
       - key: NODE_ENV
@@ -15,14 +15,3 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
-    healthCheckPath: /api/auth/health
-
-  # Frontend (Static Site)
-  - type: static
-    name: chatify-frontend
-    plan: free
-    buildCommand: npm install --prefix frontend && npm run build --prefix frontend
-    staticPublishPath: ./frontend/dist
-    envVars:
-      - key: VITE_API_URL
-        sync: false
